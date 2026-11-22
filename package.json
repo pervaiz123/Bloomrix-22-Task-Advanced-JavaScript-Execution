@@ -1,0 +1,8 @@
+{
+  "name": "taskflow-analytics-assignment-22",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

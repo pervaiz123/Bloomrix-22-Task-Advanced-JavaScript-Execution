@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Visual demonstration of JavaScript execution order and event-loop scheduling.">
+  <title>Execution Order | TaskFlow Analytics</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="js/execution-page.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="TaskFlow Analytics dashboard">
+      <span class="brand-mark">T</span>
+      <span>TaskFlow <strong>Analytics</strong></span>
+    </a>
+    <nav class="page-nav" aria-label="Main navigation">
+      <a href="index.html">Dashboard</a>
+      <a class="active" href="execution-order.html">Execution order</a>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">JAVASCRIPT RUNTIME</p>
+        <h1>Execution order demonstration</h1>
+        <p class="intro-copy">Run the example to see how the call stack, microtask queue, and task queue affect the order in which callbacks execute.</p>
+      </div>
+      <button id="run-order-button" class="button button-primary" type="button">Run demonstration</button>
+    </section>
+
+    <section class="execution-page-grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">OBSERVED OUTPUT</p>
+            <h2>Actual execution sequence</h2>
+          </div>
+          <span class="result-count">Live sequence</span>
+        </div>
+        <p class="panel-description">The output is appended as each callback runs. Run it again to repeat the sequence.</p>
+        <ol id="execution-list" class="execution-list" aria-live="polite">
+          <li class="execution-placeholder">Select “Run demonstration” to begin.</li>
+        </ol>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">WHY THIS ORDER?</p>
+            <h2>Runtime stages</h2>
+          </div>
+        </div>
+        <div class="runtime-stage-list">
+          <div class="runtime-stage"><span class="stage-number">01</span><div><strong>Call stack</strong><p>Runs the current synchronous job to completion. Nested function calls create stack frames and return in last-in, first-out order.</p></div></div>
+          <div class="runtime-stage"><span class="stage-number">02</span><div><strong>Microtask queue</strong><p>After the stack is empty, Promise reactions and queueMicrotask() callbacks run. Newly queued microtasks are also drained before the next task.</p></div></div>
+          <div class="runtime-stage"><span class="stage-number">03</span><div><strong>Task queue</strong><p>Timer and event callbacks run as later tasks. A zero-millisecond timeout does not run before the current job and microtasks finish.</p></div></div>
+          <div class="runtime-stage"><span class="stage-number">04</span><div><strong>Rendering opportunity</strong><p>After task and microtask processing, the browser may update rendering before the next event-loop iteration.</p></div></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel this-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">FUNCTION CONTEXT</p>
+          <h2>How `this` is determined</h2>
+        </div>
+      </div>
+      <p id="this-demo" class="this-output">Loading examples…</p>
+      <p class="panel-description">A regular method receives its calling object as `this`; a detached call loses that receiver in strict-mode modules. `bind()` fixes the receiver, while an arrow function uses lexical `this`.</p>
+    </section>
+
+    <footer class="footer">
+      <span>TaskFlow Analytics · Browser ES modules</span>
+      <a href="index.html">Return to dashboard</a>
+    </footer>
+  </main>
+</body>
+</html>
