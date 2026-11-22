@@ -16,9 +16,9 @@ export function createRecordCollection(records) {
             return { value: snapshot[index++], done: false };
           }
           return { value: undefined, done: true };
-        }
+        },
       };
-    }
+    },
   };
 }
 
@@ -42,7 +42,7 @@ export function getSymbolDetails() {
     internalProperty: INTERNAL_INDEX.description,
     sharedKey: Symbol.keyFor(SHARED_VERSION),
     iteratorProtocol: Symbol.iterator.description,
-    localSymbolsAreUnique: first !== second
+    localSymbolsAreUnique: first !== second,
   };
 }
 
@@ -73,7 +73,7 @@ export function demonstrateCollectionMethods() {
     setHas,
     setDelete,
     setSizeBeforeClear,
-    setSizeAfterClear: set.size
+    setSizeAfterClear: set.size,
   };
 }
 
@@ -85,7 +85,7 @@ export function attachInternalIndex(target, index) {
     configurable: true,
     enumerable: false,
     writable: true,
-    value: index
+    value: index,
   });
   return target;
 }

@@ -8,9 +8,13 @@ import {
   createAnalyticsStore,
   removeDuplicateRecords,
   updateRecord,
-  benchmarkLookups
+  benchmarkLookups,
 } from "../js/analytics.js";
-import { batchRecords, createRecordCollection, demonstrateCollectionMethods } from "../js/structures.js";
+import {
+  batchRecords,
+  createRecordCollection,
+  demonstrateCollectionMethods,
+} from "../js/structures.js";
 import { demonstrateThisBinding } from "../js/execution.js";
 
 const store = createAnalyticsStore(sampleRecords);
@@ -18,7 +22,16 @@ const store = createAnalyticsStore(sampleRecords);
 test("sample data contains at least 100 complete records", () => {
   assert.ok(sampleRecords.length >= 100);
   for (const record of sampleRecords) {
-    assert.deepEqual(Object.keys(record).sort(), ["assignedUser", "category", "date", "id", "priority", "status", "title", "value"]);
+    assert.deepEqual(Object.keys(record).sort(), [
+      "assignedUser",
+      "category",
+      "date",
+      "id",
+      "priority",
+      "status",
+      "title",
+      "value",
+    ]);
     assert.equal(typeof record.value, "number");
   }
 });
@@ -32,32 +45,49 @@ test("pure summary functions handle normal and empty data", () => {
 });
 
 test("indexed filtering and grouping return expected records", () => {
-  const filtered = store.getFilteredRecords({ category: "Backend", status: "Completed" });
-  assert.ok(filtered.every((record) => record.category === "Backend" && record.status === "Completed"));
+  const filtered = store.getFilteredRecords({
+    category: "Backend",
+    status: "Completed",
+  });
+  assert.ok(
+    filtered.every(
+      (record) =>
+        record.category === "Backend" && record.status === "Completed",
+    ),
+  );
   assert.ok(store.getGroupedByUser().size > 0);
   assert.equal(store.getById("REC-0001").id, "REC-0001");
 });
 
 test("Set-based duplicate removal keeps the first record", () => {
   const result = removeDuplicateRecords(sampleRecords, "category");
-  assert.equal(result.length, new Set(sampleRecords.map((record) => record.category)).size);
+  assert.equal(
+    result.length,
+    new Set(sampleRecords.map((record) => record.category)).size,
+  );
   assert.equal(result[0], sampleRecords[0]);
 });
 
 test("custom iterable works with for...of", () => {
   const firstThree = [];
-  for (const record of createRecordCollection(sampleRecords.slice(0, 3))) firstThree.push(record.id);
+  for (const record of createRecordCollection(sampleRecords.slice(0, 3)))
+    firstThree.push(record.id);
   assert.deepEqual(firstThree, ["REC-0001", "REC-0002", "REC-0003"]);
 });
 
 test("generator yields batches of ten and a final partial batch", () => {
   const batches = [...batchRecords(sampleRecords.slice(0, 23), 10)];
-  assert.deepEqual(batches.map((batch) => batch.length), [10, 10, 3]);
+  assert.deepEqual(
+    batches.map((batch) => batch.length),
+    [10, 10, 3],
+  );
 });
 
 test("immutable update leaves the original record unchanged", () => {
   const original = sampleRecords[0];
-  const updated = updateRecord(sampleRecords, original.id, { status: "Completed" });
+  const updated = updateRecord(sampleRecords, original.id, {
+    status: "Completed",
+  });
   assert.notEqual(updated, sampleRecords);
   assert.equal(original.status, sampleRecords[0].status);
   assert.equal(updated[0].status, "Completed");
@@ -68,7 +98,9 @@ test("memoized summaries are cached and invalidated on data update", () => {
   const first = store.getSummary(sampleRecords);
   store.getSummary(sampleRecords);
   assert.ok(store.getMemoStats().hits >= 1);
-  const next = updateRecord(sampleRecords, sampleRecords[0].id, { value: sampleRecords[0].value + 1 });
+  const next = updateRecord(sampleRecords, sampleRecords[0].id, {
+    value: sampleRecords[0].value + 1,
+  });
   store.setRecords(next);
   assert.equal(store.getMemoStats().cacheSize, 0);
   const updated = store.getSummary(store.getAllRecords());
@@ -78,7 +110,10 @@ test("memoized summaries are cached and invalidated on data update", () => {
 test("invalid input is rejected safely", () => {
   assert.throws(() => createAnalyticsStore(null), TypeError);
   assert.throws(() => batchRecords([], 0).next(), RangeError);
-  assert.throws(() => removeDuplicateRecords(sampleRecords, "unknown"), RangeError);
+  assert.throws(
+    () => removeDuplicateRecords(sampleRecords, "unknown"),
+    RangeError,
+  );
 });
 
 test("array and Map benchmark checks the same lookups", () => {
@@ -87,7 +122,6 @@ test("array and Map benchmark checks the same lookups", () => {
   assert.ok(result.arrayMs >= 0);
   assert.ok(result.mapMs >= 0);
 });
-
 
 test("Map and Set collection methods and object keys are demonstrated", () => {
   const result = demonstrateCollectionMethods();
@@ -109,7 +143,6 @@ test("this examples safely show method, detached, bound, nested, and arrow behav
   assert.equal(result.arrowCall, "undefined (lexical this)");
 });
 
-
 test("execution order runs synchronous code, microtasks, then the timer task", async () => {
   const { runExecutionOrderDemo } = await import("../js/execution.js");
   const steps = [];
@@ -123,6 +156,6 @@ test("execution order runs synchronous code, microtasks, then the timer task", a
     "Synchronous: script ends",
     "Microtask: Promise.then() callback",
     "Microtask: queueMicrotask() callback",
-    "Task: setTimeout() callback"
+    "Task: setTimeout() callback",
   ]);
 });

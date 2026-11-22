@@ -1,5 +1,6 @@
 export function runExecutionOrderDemo(onStep) {
-  if (typeof onStep !== "function") throw new TypeError("A step callback is required.");
+  if (typeof onStep !== "function")
+    throw new TypeError("A step callback is required.");
 
   const log = (label) => onStep(label);
   log("Synchronous: script starts");
@@ -25,17 +26,17 @@ export function demonstrateThisBinding() {
     name: "TaskFlow Analytics",
     getName() {
       return this?.name ?? "undefined";
-    }
+    },
   };
   const nestedService = {
     name: "Nested service",
     getName() {
       return this.name;
-    }
+    },
   };
   const arrowService = {
     name: "Arrow object name",
-    getName: () => this?.name ?? "undefined (lexical this)"
+    getName: () => this?.name ?? "undefined (lexical this)",
   };
   const detachedMethod = service.getName;
   const boundMethod = service.getName.bind(service);
@@ -45,6 +46,6 @@ export function demonstrateThisBinding() {
     detachedCall: detachedMethod(),
     boundCall: boundMethod(),
     nestedMethodCall: nestedService.getName(),
-    arrowCall: arrowService.getName()
+    arrowCall: arrowService.getName(),
   };
 }

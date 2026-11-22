@@ -9,7 +9,7 @@ document.getElementById("this-demo").textContent = [
   `Detached call: ${thisBinding.detachedCall}`,
   `Bound call: ${thisBinding.boundCall}`,
   `Nested method: ${thisBinding.nestedMethodCall}`,
-  `Arrow lexical this: ${thisBinding.arrowCall}`
+  `Arrow lexical this: ${thisBinding.arrowCall}`,
 ].join(" · ");
 
 runButton.addEventListener("click", () => {

@@ -1,6 +1,22 @@
-const categories = ["Frontend", "Backend", "Analytics", "Security", "DevOps", "Research"];
+const categories = [
+  "Frontend",
+  "Backend",
+  "Analytics",
+  "Security",
+  "DevOps",
+  "Research",
+];
 const statuses = ["To Do", "In Progress", "Review", "Completed"];
-const users = ["Ayesha Khan", "Bilal Ahmed", "Sara Ali", "Hamza Malik", "Noor Fatima", "Usman Raza", "Hira Shah", "Daniyal Iqbal"];
+const users = [
+  "Ayesha Khan",
+  "Bilal Ahmed",
+  "Sara Ali",
+  "Hamza Malik",
+  "Noor Fatima",
+  "Usman Raza",
+  "Hira Shah",
+  "Daniyal Iqbal",
+];
 const priorities = ["Low", "Medium", "High"];
 const taskNames = [
   "Improve dashboard navigation",
@@ -14,7 +30,7 @@ const taskNames = [
   "Audit application events",
   "Prepare release checklist",
   "Improve loading feedback",
-  "Test account recovery"
+  "Test account recovery",
 ];
 
 function createRecord(index) {
@@ -29,19 +45,20 @@ function createRecord(index) {
     category: categories[index % categories.length],
     status: statuses[(index * 3 + Math.floor(index / 5)) % statuses.length],
     assignedUser: users[(index * 5 + Math.floor(index / 3)) % users.length],
-    priority: priorities[(index * 7 + Math.floor(index / 4)) % priorities.length],
+    priority:
+      priorities[(index * 7 + Math.floor(index / 4)) % priorities.length],
     date,
-    value: 500 + ((index * 7919) % 24500)
+    value: 500 + ((index * 7919) % 24500),
   });
 }
 
 export const sampleRecords = Object.freeze(
-  Array.from({ length: 240 }, (_, index) => createRecord(index))
+  Array.from({ length: 240 }, (_, index) => createRecord(index)),
 );
 
 export const datasetOptions = Object.freeze({
   categories: Object.freeze([...categories]),
   statuses: Object.freeze([...statuses]),
   users: Object.freeze([...users]),
-  priorities: Object.freeze([...priorities])
+  priorities: Object.freeze([...priorities]),
 });

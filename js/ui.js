@@ -1,4 +1,8 @@
-const currency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+const currency = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+  maximumFractionDigits: 0,
+});
 const number = new Intl.NumberFormat("en-US", { maximumFractionDigits: 1 });
 
 function setText(id, value) {
@@ -40,11 +44,24 @@ export function populateFilter(selectId, values, label) {
   select.options[0].textContent = label;
 }
 
-export function renderDashboard({ records, summary, categoryStats, statusStats, structures, totalRecords, page, pageSize, message = "" }) {
+export function renderDashboard({
+  records,
+  summary,
+  categoryStats,
+  statusStats,
+  structures,
+  totalRecords,
+  page,
+  pageSize,
+  message = "",
+}) {
   setText("dataset-count", `${totalRecords.toLocaleString()} records loaded`);
   setText("metric-records", summary.total.toLocaleString());
   setText("metric-average", currency.format(summary.averageValue));
-  setText("metric-completion", `${number.format(summary.completionPercentage)}%`);
+  setText(
+    "metric-completion",
+    `${number.format(summary.completionPercentage)}%`,
+  );
   setText("metric-total-value", currency.format(summary.totalValue));
   setText("result-count", `${summary.total.toLocaleString()} results`);
 
@@ -101,7 +118,10 @@ export function renderDashboard({ records, summary, categoryStats, statusStats, 
   if (!categoryStats.length) {
     categoryContainer.textContent = "No category data for this selection.";
   } else {
-    for (const entry of categoryStats) categoryContainer.append(createBarRow(entry.category, entry.count, summary.total));
+    for (const entry of categoryStats)
+      categoryContainer.append(
+        createBarRow(entry.category, entry.count, summary.total),
+      );
   }
 
   const statusContainer = document.getElementById("status-stats");
@@ -109,12 +129,13 @@ export function renderDashboard({ records, summary, categoryStats, statusStats, 
   if (!statusStats.length) {
     statusContainer.textContent = "No status data for this selection.";
   } else {
-    for (const [status, count] of statusStats) statusContainer.append(createBarRow(status, count, summary.total));
+    for (const [status, count] of statusStats)
+      statusContainer.append(createBarRow(status, count, summary.total));
   }
 
   setText(
     "structure-summary",
-    `${structures.groupedUsers} user groups · ${structures.uniqueCategories} categories · ${structures.uniqueUsers} users · ${structures.uniqueStatuses} statuses`
+    `${structures.groupedUsers} user groups · ${structures.uniqueCategories} categories · ${structures.uniqueUsers} users · ${structures.uniqueStatuses} statuses`,
   );
 }
 
@@ -132,14 +153,15 @@ export function renderBenchmark(result) {
   const container = document.getElementById("benchmark-result");
   container.replaceChildren();
   if (result.matches !== result.iterations) {
-    container.textContent = "The lookup results did not match; benchmark output was not accepted.";
+    container.textContent =
+      "The lookup results did not match; benchmark output was not accepted.";
     return;
   }
 
   const lines = [
     ["Array.find()", `${result.arrayMs.toFixed(3)} ms`],
     ["Map.get()", `${result.mapMs.toFixed(3)} ms`],
-    ["Queries checked", result.iterations.toLocaleString()]
+    ["Queries checked", result.iterations.toLocaleString()],
   ];
   for (const [label, value] of lines) {
     const line = document.createElement("div");
